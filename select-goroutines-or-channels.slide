@@ -8,12 +8,126 @@ jbargsten@xebia.com
 https://bargsten.org
 https://github.com/jwbargsten
 
+## Setup
+
+* [These slides & code](https://github.com/jwbargsten/select-goroutines-or-channels)
+* [Tour of go](https://tour.golang.org/welcome/1)
+* [Playground](https://play.golang.org/)
+
 ## What the fuzz is about
 
-* goroutines
-* About me
-- Running, tennis, hockey
+go enables a different way to think about concurrency (and parallelism).
 
-- Telecom, Finance, Mobile, Healthcare, Transport, Startups
-- Allround, cost-benefit, get things done
-- Running golang in production @Duxxie
+[Why are map operations not defined to be atomic?](https://golang.org/doc/faq#atomic_maps)
+
+So what can we use, then?
+
+* goroutines
+* channels
+* for-select-loops
+* sync/mutex stuff *(right tool for the right job)*
+* diagnostics
+
+Building blocks are simple, but sufficient to build everything you need.
+
+## The concurrency & parallelism toolbox
+
+## goroutines
+
+Goroutines run in the same address space, so access to shared memory must be
+synchronized. The sync package provides useful primitives, although you won't
+need them much in Go as there are other primitives. 
+
+.play goroutine1/goroutine1.go /START/,/END/
+
+Like sending a task to background in the shell: `make_coffe &`
+
+[Effective go](https://golang.org/doc/effective_go#goroutines)
+
+## more goroutines
+
+You can create ~1mio on 4gb machine. **Advice from Marc: keep it at around 10k**
+
+.play goroutine2/goroutine2.go /START/,/END/
+
+## channels
+
+* essential for flow control in go
+* can be a queue
+* but usually isn't
+
+.play channel/channel.go /START/,/END/
+
+Like the pipe operator in the shell: `make_coffee | drink_coffee`
+
+## channels
+
+You cannot check if a read channel is closed without reading from it.
+
+Either you will
+
+* eventually read the "true" value from it (`v <- c`)
+* read the "true" value and "not closed" indicator (`v, ok <- c`)
+* read a zero value and the "closed" indicator (`v, ok <- c`)
+* will block in the channel read forever (`v <- c`)
+
+Only the last one technically doesn't read from the channel, but that's of little use.
+
+[Source](https://stackoverflow.com/questions/16105325/how-to-check-a-channel-is-closed-or-not-without-reading-it)
+
+## for-select-loop
+
+## Deadlock detection
+
+.play -edit deadlock/deadlock.go /SNIPPETSTART/,/SNIPPETEND/
+
+[Source](https://talks.golang.org/2013/advconc.slide#7)
+
+## Race condition detection (1)
+
+.play race/race.go /SNIPPETSTART/,/SNIPPETEND/
+
+    go run -race race/race.go
+
+## Race condition detection (2)
+
+.code race/race.out
+
+## Select on nil
+
+Sends and receives on nil channels block.
+
+Select never selects a blocking case.
+
+.play select_nil/select_nil.go /START/,/END/
+
+## How to wait for stuff
+
+.play wait/wait.go /START/,/END/ HLsync
+
+## How to better wait for stuff
+
+.play waitwg/waitwg.go /START/,/END/
+
+[Source](https://stackoverflow.com/questions/18207772/how-to-wait-for-all-goroutines-to-finish-without-using-time-sleep)
+
+## service & reply channels
+
+You can create a channel that transports channels
+
+    chan chan error
+
+For request-response stuff? I'm still figuring out when this comes handy...
+
+[random StackOverflow post](https://stackoverflow.com/questions/27236827/idiomatic-way-to-make-a-request-response-communication-using-channels)
+
+## Challenge: Web Crawler
+
+[Exercise: Web Crawler](https://tour.golang.org/concurrency/10)
+
+* perhaps as "newbie" misleading, because it leads away from idiomatic go?
+
+## Resources
+
+* [Using and understanding Go](https://golang.org/doc/#learning)
+* [Advanced Go Concurrency Patterns](https://talks.golang.org/2013/advconc.slide#1)
