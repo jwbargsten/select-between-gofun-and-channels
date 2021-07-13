@@ -1,0 +1,24 @@
+player1 1
+==================
+WARNING: DATA RACE
+Read at 0x00c0000bc008 by goroutine 8:
+  main.player()
+      /Users/jwb/go/src/github.com/jwbargsten/select-goroutines-or-channels/04_race/race.go:20 +0x15c
+
+Previous write at 0x00c0000bc008 by goroutine 7:
+  main.player()
+      /Users/jwb/go/src/github.com/jwbargsten/select-goroutines-or-channels/04_race/race.go:21 +0x55
+
+Goroutine 8 (running) created at:
+  main.main()
+      /Users/jwb/go/src/github.com/jwbargsten/select-goroutines-or-channels/04_race/race.go:14 +0xc6
+
+Goroutine 7 (running) created at:
+  main.main()
+      /Users/jwb/go/src/github.com/jwbargsten/select-goroutines-or-channels/04_race/race.go:13 +0x8f
+==================
+player2 2
+player2 3
+...
+Found 1 data race(s)
+exit status 66
