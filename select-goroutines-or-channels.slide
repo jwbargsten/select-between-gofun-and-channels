@@ -50,6 +50,9 @@ You can create ~1mio on 4gb machine. **Advice from Marc: keep it at around 10k**
 
 .play goroutine2/goroutine2.go /START/,/END/
 
+* CPU-intensive tasks -> `#goroutines == ncores`
+* IO-intensive tasks -> `#goroutines == like Marc said`
+
 ## channels
 
 * essential for flow control in go
@@ -129,5 +132,9 @@ For request-response stuff? I'm still figuring out when this comes handy...
 
 ## Resources
 
+* [Understading Go Channels](https://github.com/gophercon/2017-talks/raw/master/KavyaJoshi-UnderstandingChannels/Kavya%20Joshi%20-%20Understanding%20Channels.pdf)
 * [Using and understanding Go](https://golang.org/doc/#learning)
 * [Advanced Go Concurrency Patterns](https://talks.golang.org/2013/advconc.slide#1)
+* [Idiomatic Go Tricks](https://go-talks.appspot.com/github.com/matryer/present/idiomatic-go-tricks/main.slide#1)
+* [Deep Dive into Golang Performance - Granulate](https://granulate.io/deep-dive-into-golang-performance/)
+* [Go: Work-Stealing in Go Scheduler](https://medium.com/a-journey-with-go/go-work-stealing-in-go-scheduler-d439231be64d)
