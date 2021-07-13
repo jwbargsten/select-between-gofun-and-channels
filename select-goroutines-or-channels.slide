@@ -38,7 +38,7 @@ Goroutines run in the same address space, so access to shared memory must be
 synchronized. The sync package provides useful primitives, although you won't
 need them much in Go as there are other primitives. 
 
-.play goroutine1/goroutine1.go /START/,/END/
+.play -edit goroutine1/goroutine1.go /START/,/END/
 
 Like sending a task to background in the shell: `make_coffe &`
 
@@ -48,7 +48,7 @@ Like sending a task to background in the shell: `make_coffe &`
 
 You can create ~1mio on 4gb machine. **Advice from Marc: keep it at around 10k**
 
-.play goroutine2/goroutine2.go /START/,/END/
+.play -edit goroutine2/goroutine2.go /START/,/END/
 
 * CPU-intensive tasks -> `#goroutines == ncores`
 * IO-intensive tasks -> `#goroutines == like Marc said`
@@ -59,7 +59,7 @@ You can create ~1mio on 4gb machine. **Advice from Marc: keep it at around 10k**
 * can be a queue
 * but usually isn't
 
-.play channel/channel.go /START/,/END/
+.play -edit channel/channel.go /START/,/END/
 
 Like the pipe operator in the shell: `make_coffee | drink_coffee`
 
@@ -96,8 +96,15 @@ Sends and receives on nil channels block.
 
 Select never selects a blocking case.
 
-.play select_nil/select_nil.go /START/,/END/
+.play -edit select_nil/select_nil.go /START/,/END/
 
+## Channelsalat
+
+.image abb/kabelsalat.png _ 600
+
+go-equivalent of "Kabelsalat" would be "Channelsalat": think first, then act.
+
+## You can still shoot yourself in the foot with go, but it might tell you about it.
 
 ## Deadlock detection
 
@@ -107,7 +114,7 @@ Select never selects a blocking case.
 
 ## Race condition detection (1)
 
-.play race/race.go /SNIPPETSTART/,/SNIPPETEND/
+.play -edit race/race.go /SNIPPETSTART/,/SNIPPETEND/
 
     go run -race race/race.go
 
@@ -117,11 +124,11 @@ Select never selects a blocking case.
 
 ## How to wait for stuff
 
-.play wait/wait.go /START/,/END/ HLsync
+.play -edit wait/wait.go /START/,/END/ HLsync
 
 ## How to better wait for stuff
 
-.play waitwg/waitwg.go /START/,/END/
+.play -edit waitwg/waitwg.go /START/,/END/
 
 [Source](https://stackoverflow.com/questions/18207772/how-to-wait-for-all-goroutines-to-finish-without-using-time-sleep)
 
@@ -149,3 +156,4 @@ For request-response stuff? I'm still figuring out when this comes handy...
 * [Idiomatic Go Tricks](https://go-talks.appspot.com/github.com/matryer/present/idiomatic-go-tricks/main.slide#1)
 * [Deep Dive into Golang Performance - Granulate](https://granulate.io/deep-dive-into-golang-performance/)
 * [Go: Work-Stealing in Go Scheduler](https://medium.com/a-journey-with-go/go-work-stealing-in-go-scheduler-d439231be64d)
+* [Go by Example](https://gobyexample.com/)
