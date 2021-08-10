@@ -150,6 +150,7 @@ For request-response stuff? I'm still figuring out when this comes handy...
 
 ## Resources
 
+* [go - What are channels used for? - Stack Overflow](https://stackoverflow.com/questions/39826692/what-are-channels-used-for)
 * [Understading Go Channels](https://github.com/gophercon/2017-talks/raw/master/KavyaJoshi-UnderstandingChannels/Kavya%20Joshi%20-%20Understanding%20Channels.pdf)
 * [Using and understanding Go](https://golang.org/doc/#learning)
 * [Advanced Go Concurrency Patterns](https://talks.golang.org/2013/advconc.slide#1)
