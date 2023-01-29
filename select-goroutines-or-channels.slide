@@ -23,9 +23,11 @@ go enables a different way to think about concurrency (and parallelism).
 So what can we use, then?
 
 * goroutines
+* sync/mutex stuff
+
 * channels
 * for-select-loops
-* sync/mutex stuff *(right tool for the right job)*
+
 * diagnostics
 
 Building blocks are simple, but sufficient to build everything you need.
@@ -55,28 +57,14 @@ You can create ~1mio on 4gb machine. **Advice from Marc: keep it at around 10k**
 
 ## channels
 
-* essential for flow control in go
-* can be a queue
-* but usually isn't
+flow control, messaging & synchronisation in go
+
+* inspired by Hoare’s Communicating Sequential Processes
+* potentially harmful (more about this later)
 
 .play -edit channel/channel.go /START/,/END/
 
 Like the pipe operator in the shell: `make_coffee | drink_coffee`
-
-## channels
-
-You cannot check if a read channel is closed without reading from it.
-
-Either you will
-
-* eventually read the "true" value from it (`v <- c`)
-* read the "true" value and "not closed" indicator (`v, ok <- c`)
-* read a zero value and the "closed" indicator (`v, ok <- c`)
-* will block in the channel read forever (`v <- c`)
-
-Only the last one technically doesn't read from the channel, but that's of little use.
-
-[Source](https://stackoverflow.com/questions/16105325/how-to-check-a-channel-is-closed-or-not-without-reading-it)
 
 ## for-select-loop
 
@@ -98,13 +86,43 @@ Select never selects a blocking case.
 
 .play -edit select_nil/select_nil.go /START/,/END/
 
+## the challenge: closing channels
+
+You cannot check if a read channel is closed without reading from it.
+
+Either you will
+
+* eventually read the "true" value from it (`v <- c`)
+* read the "true" value and "not closed" indicator (`v, ok <- c`)
+* read a zero value and the "closed" indicator (`v, ok <- c`)
+* will block in the channel read forever (`v <- c`)
+
+Only the last one technically doesn't read from the channel, but that's of little use.
+
+[Source](https://stackoverflow.com/questions/16105325/how-to-check-a-channel-is-closed-or-not-without-reading-it)
+
+
 ## Channelsalat
 
 .image abb/kabelsalat.png _ 600
 
 go-equivalent of "Kabelsalat" would be "Channelsalat": think first, then act.
 
-## You can still shoot yourself in the foot with go, but it might tell you about it.
+## channel advice
+
+* no channels in APIs -> *use callbacks*
+* if you are new to go, you'll overuse channels
+* channels use mutexes under the hood, mutex is faster
+* synchronize access to shared memory -> *use mutex*
+* if you think it can be done with a mutex -> *use mutex*
+* closing channels is hard, zombie go functions the reality
+* don't send nil into channels
+* [channels are involved more frequently involved in bugs](https://songlh.github.io/paper/go-study.pdf)
+* [go context](https://pkg.go.dev/golang.org/x/net/context) might be useful
+
+[Source](https://news.ycombinator.com/item?id=11211112)
+
+## You can shoot yourself in the foot with go, but it might tell you about it.
 
 ## Deadlock detection
 
